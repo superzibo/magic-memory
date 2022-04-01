@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import SingleCard from './components/SingleCard'
 import './App.css'
 
 const cardImages = [
@@ -14,6 +15,8 @@ function App() {
 
   const[cards, setCards] = useState([])
   const[turns, setTurns] = useState(0)
+  const[choiceOne, setChoiceOne] = useState(null)
+  const[choiceTwo, setChoiceTwo] = useState(null)
 
   // shuffle cards
   const shuffleCards = () => {
@@ -25,24 +28,36 @@ function App() {
     setTurns(0)
   }
 
-  console.log(cards,turns)
+  // handle a choice
+  const handleChoice = (card) => {
+    !choiceOne ? setChoiceOne(card) : setChoiceTwo(card)
+    console.log("1" + choiceOne)
+    console.log("2" + choiceTwo)
+  }
+
+  // reset choices && increase turn
+  const resetTurn = () => {
+    setChoiceOne(null)
+    setChoiceTwo(null)
+    setTurns(prevTurns => prevTurns + 1)
+  }
+
 
   return (
     <div className="App">
       <h1>Magic Match</h1>
       <button onClick={shuffleCards}>New Game</button>
 
-      <div className='card-grid'>
+    <div className='card-grid'>
         {
           cards.map((card) => (
-            <div className='card' key={card.id}>
-              <div>
-                <img className='front' src={card.src} alt="card front" />
-                <img className='back' src="/img/cover.png" alt="card back"/>
-              </div>
-            </div>
+            <SingleCard key={card.id} 
+            card={card}
+            handleChoice = {handleChoice}
+            />
           ))}
       </div>
+
     </div>
   );
 }
